@@ -17,7 +17,7 @@ The version of this repository is made of 4 digits:
 This strategy is employed to ensure version consistency among the various supported languages. When updating the Finger SDK version, all the samples are updated as well.
 
 For this release of the samples the version numbers are : 
-* Samples version: **3.0.1.0**
+* Samples version: **3.0.1.1**
 * Required id3 Finger SDK version: **3.0.1**
 
 ## Getting started

@@ -92,7 +92,7 @@ public class RecognitionNIST {
                     if (score > FingerMatcherThreshold.FMR10000.getValue()) {
                         System.out.println("Match position " + position1.name() + ": " + score);
                     } else{
-                        System.out.println("Match position " + position1.name() + ": " + score);
+                        System.out.println("No Match position " + position1.name() + ": " + score);
                     }
                     template2.close();
                 }
