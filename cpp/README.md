@@ -23,7 +23,7 @@ id3 Face SDK needs to check this license before any other operation. You need to
 
 ### Models directory
 
-id3 Finger SDK is based on machine learning methods and requires model files to perform image processing operations. Please read the provided documentation to understand which models you need and then download them from the following URL: https://cloud.id3.eu/index.php/s/y63PysbS3w6NPm6
+id3 Finger SDK is based on machine learning methods and requires model files to perform image processing operations. Please read the provided documentation to understand which models you need and then download them from the following URL: https://cloud.id3.eu/index.php/s/x3XHygq82oi7BP4
 
 For this sample you need:
 - id3FingerModel_FingerMinutiaDetector3B.id3nn
