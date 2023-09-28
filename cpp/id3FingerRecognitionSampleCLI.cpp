@@ -20,7 +20,7 @@ int main(int argc, char **argv)
 	/**
    	 * Fill in the correct path to the license.
    	 */
-	std::string license_path = "your_license_path_here";
+	std::string license_path = R"(your_license_path_here)";
 	/**
    	 * Fill in the correct path to the downloaded models.
    	 */
@@ -36,7 +36,7 @@ int main(int argc, char **argv)
    	 * It is required to call the id3FingerLibrary_CheckLicense() function before calling any other function of the SDK.
    	 */
 	std::cout << "Checking license" << std::endl;
-	err = id3FingerLibrary_CheckLicense(license_path.c_str(), nullptr);
+	err = id3FingerLicense_CheckLicense(license_path.c_str(), nullptr);
 	check(err, "id3FingerLibrary_CheckLicense");
 
 	/**
@@ -57,7 +57,7 @@ int main(int argc, char **argv)
 	check(err, "id3FingerImage_FromFile 2");
 
 	/**
-	 * Set the resolution of the two previsously loaded face images.
+	 * Set the resolution of the two previsously loaded finger images.
 	 * Not doing so would result in a -2006 "Invalid resolution" error during finger template extraction
 	 */
 	err = id3FingerImage_SetResolution(reference_image,500);
@@ -142,7 +142,7 @@ int main(int argc, char **argv)
 	 */
 	std::cout << "Export reference template as file" << std::endl;
 	std::string reference_template_path = data_dir + "reference_template.bin";
-	err = id3FingerTemplate_ToFile(reference_template,id3FingerTemplateBufferType_Iso19794_2_2005,reference_template_path.c_str());
+	err = id3FingerTemplate_ToFile(reference_template,id3FingerTemplateFormat_CompactCardIso19794_2_2005,reference_template_path.c_str());
 	check(err, "id3FingerTemplate_ToFile");
 	/**
 	 * Finger templates can also directly be exported into a buffer.
@@ -153,11 +153,11 @@ int main(int argc, char **argv)
 	std::cout << "Export probe template as buffer" << std::endl;
 	int probe_template_buffer_size = 0;
 	unsigned char* probe_template_buffer = nullptr;
-	err = id3FingerTemplate_ToBuffer(probe_template,id3FingerTemplateBufferType_Iso19794_2_2005,probe_template_buffer,&probe_template_buffer_size);
+	err = id3FingerTemplate_ToBuffer(probe_template,id3FingerTemplateFormat_CompactCardIso19794_2_2005,probe_template_buffer,&probe_template_buffer_size);
 	if(err == id3FingerError_InsufficientBuffer) // expected error as an empty buffer has been provided
 	{
 		probe_template_buffer = (unsigned char*)malloc(probe_template_buffer_size);
-		err = id3FingerTemplate_ToBuffer(probe_template,id3FingerTemplateBufferType_Iso19794_2_2005,probe_template_buffer,&probe_template_buffer_size);
+		err = id3FingerTemplate_ToBuffer(probe_template,id3FingerTemplateFormat_CompactCardIso19794_2_2005,probe_template_buffer,&probe_template_buffer_size);
 		check(err, "id3FingerTemplate_ToBuffer with allocated buffer");
 		// probe_template_buffer now contains the exported template and could be stored, etc
 		free(probe_template_buffer);

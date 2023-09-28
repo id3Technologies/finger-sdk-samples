@@ -17,8 +17,8 @@ The version of this repository is made of 4 digits:
 This strategy is employed to ensure version consistency among the various supported languages. When updating the Finger SDK version, all the samples are updated as well.
 
 For this release of the samples the version numbers are : 
-* Samples version: **3.0.1.1**
-* Required id3 Finger SDK version: **3.0.1**
+* Samples version: **3.3.0.0**
+* Required id3 Finger SDK version: **3.3.0**
 
 ## Getting started
 
@@ -57,10 +57,9 @@ Then you need to install the necessary models in the *sdk/models/* subfolder res
         ...
         ├── java
         ├── models
-            ├── eye_gaze_estimator_v2a.id3nn // TODO UPDATE MODELS NAMES
-            ├── eye_openness_detector_v1a.id3nn
+            ├── finger_aligner_v1a.id3nn
             ...
-            └── face_pose_estimator_v1a.id3nn
+            └── finger_minutia_detector_v1a.id3nn
         └── README.md
     └── README.md
 

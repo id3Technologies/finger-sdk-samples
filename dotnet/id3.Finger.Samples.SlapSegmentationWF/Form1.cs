@@ -25,7 +25,7 @@ namespace id3.Finger.Samples.SlapSegmentationWF
             {
                 // Before calling any function of the SDK you must first check a valid license file.
                 // To get such a file please use the provided activation tool.
-                FingerLibrary.CheckLicense(@"your_license_path_here");
+                FingerLicense.CheckLicense(@"your_license_path_here");
             }
             catch (FingerException ex)
             {

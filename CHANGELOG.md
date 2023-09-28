@@ -1,5 +1,9 @@
 # id3 Finger SDK Samples Changelog
 
+## Version 3.3.0.0 (2023-09-28)
+- Update with Finger SDK version 3.3.0.
+- Added python sample.
+
 ## Version 3.0.1.1 (2023-01-12)
 - Fix typo in RecognitionNIST Java sample
 

@@ -33,7 +33,7 @@ namespace id3.Finger.Samples.RecognitionWF
                 // Before calling any function of the SDK you must first check a valid license file.
                 // To get such a file please use the provided activation tool.
                 // The license file can also be retrieved using the License.activation(...) APIs
-                FingerLibrary.CheckLicense(@"your_license_path_here");
+                FingerLicense.CheckLicense(@"your_license_path_here");
             }
             catch (FingerException ex)
             {

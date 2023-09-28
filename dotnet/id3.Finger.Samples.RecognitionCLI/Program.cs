@@ -24,7 +24,7 @@ namespace id3.Finger.Samples.RecognitionCLI
                  * To get such a file please use the provided activation tool.
                  * It is also possible to use the FingerLicense.Activation(...) APIs
                  */
-                FingerLibrary.CheckLicense(@"your_license_path_here");
+                FingerLicense.CheckLicense(@"your_license_path_here");
             }
             catch (FingerException ex)
             {
@@ -119,7 +119,7 @@ namespace id3.Finger.Samples.RecognitionCLI
              * By default the Finger Matcher instance uses all possible data found in the provided templates.
              * However it is possible to force it to only use ISO minutiae data for example.
              */
-            fingerMatcher.SetMinexOnly(true);
+            fingerMatcher.MinexOnly = true;
             Console.Write("Comparing templates minutiae only... ");
             int scoreMinex = fingerMatcher.CompareTemplates(referenceTemplate, probeTemplate);
             Console.Write("Done.\n");

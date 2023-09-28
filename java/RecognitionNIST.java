@@ -12,7 +12,7 @@ public class RecognitionNIST {
     
     public static void main(String[] args) {
         System.out.println("--------------------------------");
-        System.out.println("id3.Face.Samples.RecognitionNIST");
+        System.out.println("id3.Finger.Samples.RecognitionNIST");
         System.out.println("--------------------------------");
 
         /*
@@ -20,7 +20,7 @@ public class RecognitionNIST {
          * To get such a file please use the provided activation tool.
          * It is also possible to use the FingerLicense.Activation(...) APIs
          */
-        FingerLibrary.checkLicense("your_license_path_here");
+        FingerLicense.checkLicense("your_license_path_here");
 
         /*
          * The Finger SDK heavily relies on deep learning technics and hence requires trained models to run.
@@ -55,10 +55,10 @@ public class RecognitionNIST {
          */
         System.out.println("Loading images from ANSI/NIST-ITL transactions... ");
         // Load from traditional encoded transation with type 04 records
-        FingerImageList imageList1 = FingerImageList.fromFile(FingerImageBufferType.AN2K_2011_TRANSACTION_TRADITIONAL_ENCODING,"../data/an2k-type-04-tpcard.an2");
+        FingerImageRecord imageList1 = FingerImageRecord.fromFile(FingerImageRecordFormat.AN2K_2011_TRANSACTION_TRADITIONAL_ENCODING,"../data/an2k-type-04-tpcard.an2");
         System.out.println("Found " + imageList1.getCount() + " fingerprint images in the an2k-type-04-tpcard.an2 transaction");
         // Load from xml encoded transation with type 14 records
-        FingerImageList imageList2 = FingerImageList.fromFile(FingerImageBufferType.AN2K_2011_TRANSACTION_TRADITIONAL_ENCODING,"../data/an2k-type-14-tpcard.an2");
+        FingerImageRecord imageList2 = FingerImageRecord.fromFile(FingerImageRecordFormat.AN2K_2011_TRANSACTION_TRADITIONAL_ENCODING,"../data/an2k-type-14-tpcard.an2");
         System.out.println("Found " + imageList2.getCount() + " fingerprint images in the an2k-type-14-tpcard.an2 transaction");
         System.out.println("Done.\n");
 

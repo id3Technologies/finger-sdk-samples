@@ -8,7 +8,7 @@ public class RecognitionCLI {
     
     public static void main(String[] args) {
         System.out.println("-------------------------------");
-        System.out.println("id3.Face.Samples.RecognitionCLI");
+        System.out.println("id3.Finger.Samples.RecognitionCLI");
         System.out.println("-------------------------------");
 
         /*
@@ -16,7 +16,7 @@ public class RecognitionCLI {
          * To get such a file please use the provided activation tool.
          * It is also possible to use the FingerLicense.Activation(...) APIs
          */
-        FingerLibrary.checkLicense("your_license_path_here");
+        FingerLicense.checkLicense("your_license_path_here");
 
         /*
          * The Finger SDK heavily relies on deep learning technics and hence requires trained models to run.
@@ -40,8 +40,8 @@ public class RecognitionCLI {
          * Finger images are always loaded to 8 bits grayscale pixel format
          */
         System.out.println("Loading images from files... ");
-        FingerImage image1 = FingerImage.fromFile("../data/image1.bmp", PixelFormat.GRAYSCALE_8BITS);
-        FingerImage image2 = FingerImage.fromFile("../data/image2.bmp", PixelFormat.GRAYSCALE_8BITS);
+        FingerImage image1 = FingerImage.fromFile("../data/image1.bmp", PixelFormat.GRAYSCALE_8_BITS);
+        FingerImage image2 = FingerImage.fromFile("../data/image2.bmp", PixelFormat.GRAYSCALE_8_BITS);
         System.out.println("Done.\n");
 
         /*

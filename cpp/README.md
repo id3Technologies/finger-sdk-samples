@@ -17,7 +17,7 @@ There are some source code modifications to make before to build.
 
 To run the sample you will need a license file. To retrieve this file you can use the CLI tool to get your hardware ID and then use either the windows activation tool to retrieve the file or contact id3 with it.
 
-id3 Face SDK needs to check this license before any other operation. You need to fill in the path to your license in the source files:
+id3 Finger SDK needs to check this license before any other operation. You need to fill in the path to your license in the source files:
 
     std::string license_path = "your_license_path_here";
 
@@ -35,7 +35,7 @@ std::string models_dir = "../../../sdk/models/";
 
 ## Linux build steps
 
-### id3FaceRecognitionSampleCLI
+### id3FingerRecognitionSampleCLI
 
 To build and run **id3FingerRecognitionSampleCLI**, use the following command lines:
 
@@ -50,14 +50,14 @@ export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:../../../../bin/linux/x64
 
 ## Windows build steps
 
-### id3FaceRecognitionSampleCLI
+### id3FingerRecognitionSampleCLI
 
-To build and run **id3FaceRecognitionSampleCLI**, use the following command lines:
+To build and run **id3FingerRecognitionSampleCLI**, use the following command lines:
 ```bat
 mkdir build
 cd build
 cmake -G "Visual Studio 15 2017 Win64" -DWINDOWS_BUILD=ON ..
 cmake --build .
 cd Debug
-.\id3FaceRecognitionSampleCLI.exe
+.\id3FingerRecognitionSampleCLI.exe
 ```
