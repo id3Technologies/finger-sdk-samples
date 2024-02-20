@@ -16,15 +16,15 @@ void check(int err, const std::string& func_name)
 
 int main(int argc, char **argv)
 {
-	std::string data_dir = "data/";
+	std::string data_dir = "../../../data/";
 	/**
    	 * Fill in the correct path to the license.
    	 */
-	std::string license_path = R"(your_license_path_here)";
+	std::string license_path = "../../../id3Finger.lic";
 	/**
    	 * Fill in the correct path to the downloaded models.
    	 */
-	std::string models_dir = "models/";
+	std::string models_dir = "../../../models/";
 	/**
    	 * All functions of the API return an error code.
    	 */
@@ -122,8 +122,7 @@ int main(int argc, char **argv)
 	 * For 1 to 1 authentication, it is recommended to select a threshold of at least 4000 (FMR=1:10K).
 	 * Please see documentation to get more information on how to choose the threshold.
 	 */
-	std::cout << std::endl
-		 << "Comparing detected finger" << std::endl;
+	std::cout << std::endl << "Comparing detected finger" << std::endl;
 	int score = 0;
 	err = id3FingerMatcher_CompareTemplates(matcher, probe_template, reference_template, &score);
 	check(err, "id3FingerMatcher_CompareTemplates");
@@ -166,9 +165,7 @@ int main(int argc, char **argv)
 		check(err, "id3FingerTemplate_ToBuffer with empty buffer");
 	}
 
-	std::cout << std::endl
-		 << "Press any key..." << std::endl;
-	std::cin.get();
+	std::cout << std::endl << "Press any key..." << std::endl;
 	/**
 	 * Dispose of all objects and unload models.
 	 */

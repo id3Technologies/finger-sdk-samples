@@ -11,22 +11,22 @@ public class RecognitionNIST {
      */
     
     public static void main(String[] args) {
-        System.out.println("--------------------------------");
+        System.out.println("----------------------------------");
         System.out.println("id3.Finger.Samples.RecognitionNIST");
-        System.out.println("--------------------------------");
+        System.out.println("----------------------------------");
 
         /*
          * Before calling any function of the SDK you must first check a valid license file.
          * To get such a file please use the provided activation tool.
          * It is also possible to use the FingerLicense.Activation(...) APIs
          */
-        FingerLicense.checkLicense("your_license_path_here");
+        FingerLicense.checkLicense("../id3Finger.lic");
 
         /*
          * The Finger SDK heavily relies on deep learning technics and hence requires trained models to run.
          * Fill in the correct path to the downloaded models.
          */
-        String modelPath = "../sdk/models";
+        String modelPath = "../models";
 
         /*
          * Once a model is loaded in the desired processing unit (CPU or GPU) several instances of the associated processor can be created.

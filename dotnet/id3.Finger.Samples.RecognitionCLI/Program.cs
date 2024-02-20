@@ -24,7 +24,7 @@ namespace id3.Finger.Samples.RecognitionCLI
                  * To get such a file please use the provided activation tool.
                  * It is also possible to use the FingerLicense.Activation(...) APIs
                  */
-                FingerLicense.CheckLicense(@"your_license_path_here");
+                FingerLicense.CheckLicense(@"..\..\..\..\id3Finger.lic");
             }
             catch (FingerException ex)
             {
@@ -37,7 +37,7 @@ namespace id3.Finger.Samples.RecognitionCLI
              * The Finger SDK heavily relies on deep learning technics and hence requires trained models to run.
              * Fill in the correct path to the downloaded models.
              */
-            string modelPath = "../../../../sdk/models";
+            string modelPath = "../../../../models";
             /*
             * Once a model is loaded in the desired processing unit (CPU or GPU) several instances of the associated processor can be created.
             * For instance in this sample, we load a minutia detector.

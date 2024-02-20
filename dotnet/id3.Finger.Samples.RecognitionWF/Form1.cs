@@ -33,7 +33,7 @@ namespace id3.Finger.Samples.RecognitionWF
                 // Before calling any function of the SDK you must first check a valid license file.
                 // To get such a file please use the provided activation tool.
                 // The license file can also be retrieved using the License.activation(...) APIs
-                FingerLicense.CheckLicense(@"your_license_path_here");
+                FingerLicense.CheckLicense(@"..\..\..\..\id3Finger.lic");
             }
             catch (FingerException ex)
             {
@@ -43,7 +43,7 @@ namespace id3.Finger.Samples.RecognitionWF
 
             // The Finger SDK heavily relies on deep learning technics and hence requires trained models to run.
             // Fill in the correct path to the downloaded models.
-            string modelPath = "..\\..\\..\\..\\sdk\\models";
+            string modelPath = "../../../../models";
 
             try
             {

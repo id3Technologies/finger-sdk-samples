@@ -1,3 +1,4 @@
+import os
 import id3finger
 
 print("------------------")
@@ -7,11 +8,12 @@ print("------------------")
 # Before calling any function of the SDK you must first check a valid license file.
 # To get such a file please use the provided activation tool.
 # It is also possible to use the FingerLicense.Activation(...) APIs
-id3finger.FingerLicense.check_license("your_license_path_here")
+cw = os.getcwd()
+id3finger.FingerLicense.check_license("../id3Finger.lic")
 
 # The Finger SDK heavily relies on deep learning technics and hence requires trained models to run.
 # Fill in the correct path to the downloaded models.
-modelPath = "../sdk/models"
+modelPath = "../models"
 
 # Once a model is loaded in the desired processing unit (CPU or GPU) several instances of the associated processor can be created.
 # For instance in this sample, we load:

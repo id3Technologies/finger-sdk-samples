@@ -17,8 +17,8 @@ The version of this repository is made of 4 digits:
 This strategy is employed to ensure version consistency among the various supported languages. When updating the Finger SDK version, all the samples are updated as well.
 
 For this release of the samples the version numbers are : 
-* Samples version: **3.3.0.0**
-* Required id3 Finger SDK version: **3.3.0**
+* Samples version: **3.4.0.0**
+* Required id3 Finger SDK version: **3.4.0**
 
 ## Getting started
 
@@ -44,7 +44,7 @@ Once you have the SDK ZIP archive, you need to unzip it in the *sdk/* subfolder 
         └── README.md
     └── README.md
 
-Then you need to install the necessary models in the *sdk/models/* subfolder resulting in the following architecture. 
+Then you need to install the necessary models in the *models/* subfolder resulting in the following architecture. 
 
     .
     ├── android
@@ -56,11 +56,11 @@ Then you need to install the necessary models in the *sdk/models/* subfolder res
         ├── bin
         ...
         ├── java
-        ├── models
-            ├── finger_aligner_v1a.id3nn
-            ...
-            └── finger_minutia_detector_v1a.id3nn
         └── README.md
+    ├── models
+        ├── finger_aligner_v1a.id3nn
+        ...
+        └── finger_minutia_detector_v1a.id3nn
     └── README.md
 
 **Notes**

@@ -1,5 +1,9 @@
 # id3 Finger SDK Samples Changelog
 
+## Version 3.4.0.0 (2024-02-20)
+- Update with Finger SDK version 3.4.0.
+- Update dotnet Framework to 4.8.1
+
 ## Version 3.3.0.0 (2023-09-28)
 - Update with Finger SDK version 3.3.0.
 - Added python sample.

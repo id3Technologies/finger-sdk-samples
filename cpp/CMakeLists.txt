@@ -29,5 +29,5 @@ add_executable(id3FingerRecognitionSampleCLI id3FingerRecognitionSampleCLI.cpp)
 target_link_libraries(id3FingerRecognitionSampleCLI id3Finger)
 
 postBuildCopyDirectory(id3FingerRecognitionSampleCLI $<TARGET_FILE_DIR:id3FingerRecognitionSampleCLI> ${LINK_DIR})
-postBuildCopyDirectory(id3FingerRecognitionSampleCLI $<TARGET_FILE_DIR:id3FingerRecognitionSampleCLI>/data ${CMAKE_CURRENT_LIST_DIR}/../data)
-postBuildCopyDirectory(id3FingerRecognitionSampleCLI $<TARGET_FILE_DIR:id3FingerRecognitionSampleCLI>/models ${CMAKE_CURRENT_LIST_DIR}/../sdk/models)
+#postBuildCopyDirectory(id3FingerRecognitionSampleCLI $<TARGET_FILE_DIR:id3FingerRecognitionSampleCLI>/data ${CMAKE_CURRENT_LIST_DIR}/../data)
+#postBuildCopyDirectory(id3FingerRecognitionSampleCLI $<TARGET_FILE_DIR:id3FingerRecognitionSampleCLI>/models ${CMAKE_CURRENT_LIST_DIR}/../sdk/models)

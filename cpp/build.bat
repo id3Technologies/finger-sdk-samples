@@ -1,4 +1,4 @@
-REM Must be called from powershell
+ REM Must be called from powershell
 mkdir .\build\
 cd .\build\
 cmake -G "Visual Studio 15 2017 Win64" -DWINDOWS_BUILD=ON ..
