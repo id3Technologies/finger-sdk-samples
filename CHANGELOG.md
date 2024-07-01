@@ -1,5 +1,8 @@
 # id3 Finger SDK Samples Changelog
 
+## Version 3.5.1.0 (2024-07-01)
+- Update with Finger SDK version 3.5.1.
+
 ## Version 3.5.0.0 (2024-06-07)
 - Update with Finger SDK version 3.5.0.
 - Added finger capture cpp sample.

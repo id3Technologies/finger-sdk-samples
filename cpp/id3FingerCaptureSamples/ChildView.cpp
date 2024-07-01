@@ -146,7 +146,7 @@ void CChildView::DeviceAddedHandler(int device_id)
     m_statusBar->SetPaneText(0, msg.c_str());
     // Auto select first camera
     int currentDeviceId = 0;
-    int sdk_err = id3FingerCaptureFingerScanner_GetDevice(m_hFingerCapture, &currentDeviceId);
+    int sdk_err = id3FingerCaptureFingerScanner_GetDeviceId(m_hFingerCapture, &currentDeviceId);
     if (currentDeviceId == 0)
     {
         sdk_err = id3FingerCaptureFingerScanner_OpenDevice(m_hFingerCapture, device_id);
@@ -159,7 +159,7 @@ void CChildView::DeviceAddedHandler(int device_id)
 void CChildView::DeviceRemovedHandler(int device_id)
 {
     int currentDeviceId = 0;
-    id3FingerCaptureFingerScanner_GetDevice(m_hFingerCapture, &currentDeviceId);
+    id3FingerCaptureFingerScanner_GetDeviceId(m_hFingerCapture, &currentDeviceId);
     if (device_id == currentDeviceId)
     {
         auto camera_name = getDeviceName(device_id);
@@ -173,7 +173,7 @@ void CChildView::DeviceStatusChangedHandler(id3FingerCaptureStatus eStatus, int 
     if (eStatus == id3DevicesDeviceCaptureStatus_DeviceReady)
     {
         int currentDeviceId = 0;
-        id3FingerCaptureFingerScanner_GetDevice(m_hFingerCapture, &currentDeviceId);
+        id3FingerCaptureFingerScanner_GetDeviceId(m_hFingerCapture, &currentDeviceId);
         m_statusBar->SetPaneText(0, format("Start senser %d", currentDeviceId).c_str());
 
         id3FingerCaptureFingerScanner_StartCapture(m_hFingerCapture, id3FingerCaptureFingerPositionFlags_RightIndexFinger);
@@ -182,7 +182,7 @@ void CChildView::DeviceStatusChangedHandler(id3FingerCaptureStatus eStatus, int 
     else if (eStatus == id3DevicesDeviceCaptureStatus_DeviceError)
     {
         int currentDeviceId = 0;
-        id3FingerCaptureFingerScanner_GetDevice(m_hFingerCapture, &currentDeviceId);
+        id3FingerCaptureFingerScanner_GetDeviceId(m_hFingerCapture, &currentDeviceId);
         m_statusBar->SetPaneText(0, format("sensor %d error %d", currentDeviceId, errorCode).c_str());
     }
 }
