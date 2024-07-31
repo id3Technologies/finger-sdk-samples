@@ -1,5 +1,10 @@
 # id3 Finger SDK Samples Changelog
 
+## Version 3.6.0.0 (2024-07-31)
+- Update with Finger SDK version 3.6.0.
+- Fixed issue with wrong resolution in an2 files.
+- Added reading of the resolution of images in an an2 file in dotnet.
+
 ## Version 3.5.1.0 (2024-07-01)
 - Update with Finger SDK version 3.5.1.
 
