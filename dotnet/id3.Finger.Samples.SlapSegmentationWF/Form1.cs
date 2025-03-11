@@ -77,7 +77,7 @@ namespace id3.Finger.Samples.SlapSegmentationWF
             image.SetResolution(500);
 
             // Detect fingerprints if any
-            DetectedFingerList detectedFingerList = fingerDetector.DetectFingers(image);
+            DetectedFingerList detectedFingerList = fingerDetector.DetectSlap(image);
 
             // Display
             FingerImage imageToDraw = FingerImage.FromFile(textBox1.Text, PixelFormat.Bgr24Bits);

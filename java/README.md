@@ -19,13 +19,10 @@ Before to build any of the JAVA samples, you need to fill in the path to your li
 ### Ensuring models are present
 
 Following models are required to be in the sdk/models/ directory:
-- For RecognitionCLI sample:
-    - finger_minutia_detector_v3b.id3nn
-    - finger_aligner_v1a.id3nn
-    - finger_encoder_v1a.id3nn
-- For RecognitionNIST sample:
+
     - finger_minutia_detector_v3b.id3nn
 
 ### Build and run
+
 Samples build will directly use the java and javac tools.
 For conveniency a .bat windows script and a .sh linux script are provided.

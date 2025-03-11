@@ -230,6 +230,7 @@ xcopy /e /y /i $(SolutionDir)..\sdk\devices $(TargetDir)\devices</Command>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="ChildView.h" />
+    <ClInclude Include="id3FingerCpp.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="id3FingerCaptureSamples.h" />
     <ClInclude Include="MainFrm.h" />

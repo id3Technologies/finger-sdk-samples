@@ -110,15 +110,10 @@
   <PropertyGroup>
     <PostBuildEvent>if not exist "$(TargetDir)bin" mkdir "$(TargetDir)bin"
 
-
 if not exist "$(TargetDir)bin\x64" mkdir "$(TargetDir)bin\x64"
-
 if not exist "$(TargetDir)bin\x86" mkdir "$(TargetDir)bin\x86"
 
-
-
 copy "$(SolutionDir)..\sdk\bin\windows\x64\*.dll" "$(TargetDir)bin\x64\"
-
 copy "$(SolutionDir)..\sdk\bin\windows\x86\*.dll" "$(TargetDir)bin\x86\"
 </PostBuildEvent>
   </PropertyGroup>

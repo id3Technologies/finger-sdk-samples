@@ -71,26 +71,8 @@ void check_sdkerr(int err, const char *msg)
 
 std::string getDeviceName(int device_id)
 {
-    std::string str;
-    ID3_DEVICES_DEVICE_INFO device{};
-    id3DevicesDeviceInfo_Initialize(&device);
-    int sdk_err = id3DevicesDeviceManager_GetDeviceInfo(device_id, device);
-    if (sdk_err == 0) {
-        int size = -1;
-        sdk_err = id3DevicesDeviceInfo_GetName(device, nullptr, &size);
-        if (sdk_err == id3DevicesError_InsufficientBuffer) {
-            str.resize(size);
-        }
-        sdk_err = id3DevicesDeviceInfo_GetName(device, (char *)str.data(), &size);
-        if (sdk_err == 0) {
-            str.resize(size);
-        }
-        else {
-            check_sdkerr(sdk_err, "getDeviceName");
-        }
-    }
-    id3DevicesDeviceInfo_Dispose(&device);
-    return str;
+    DeviceInfo deviceInfo(device_id);
+    return deviceInfo.getName();
 }
 
 // C Camera Event Handler
@@ -126,11 +108,9 @@ BEGIN_MESSAGE_MAP(CChildView, CWnd)
     ON_WM_CLOSE()
 END_MESSAGE_MAP()
 
-CChildView::CChildView()
+CChildView::CChildView() : m_fingerCapture(false)
 {
     m_statusBar = nullptr;
-    m_hFingerCapture = nullptr;
-    m_hCurrentPicture = nullptr;
     m_lockCurrentPicture = 0;
 }
 
@@ -145,23 +125,19 @@ void CChildView::DeviceAddedHandler(int device_id)
     std::string msg = "Found camera " + camera_name;
     m_statusBar->SetPaneText(0, msg.c_str());
     // Auto select first camera
-    int currentDeviceId = 0;
-    int sdk_err = id3FingerCaptureFingerScanner_GetDeviceId(m_hFingerCapture, &currentDeviceId);
-    if (currentDeviceId == 0)
-    {
-        sdk_err = id3FingerCaptureFingerScanner_OpenDevice(m_hFingerCapture, device_id);
-    }
-    if (sdk_err != 0) {
-        check_sdkerr(sdk_err, "DeviceAddedHandler");
+    int currentDeviceId = m_fingerCapture.deviceId();
+    if (currentDeviceId == 0) {
+        auto sdk_err = m_fingerCapture.openDevice(device_id);
+        if (sdk_err != 0) {
+            check_sdkerr(sdk_err, "DeviceAddedHandler");
+        }
     }
 }
 
 void CChildView::DeviceRemovedHandler(int device_id)
 {
-    int currentDeviceId = 0;
-    id3FingerCaptureFingerScanner_GetDeviceId(m_hFingerCapture, &currentDeviceId);
-    if (device_id == currentDeviceId)
-    {
+    int currentDeviceId = m_fingerCapture.deviceId();
+    if (device_id == currentDeviceId) {
         auto camera_name = getDeviceName(device_id);
         std::string msg = "Lost camera " + camera_name;
         m_statusBar->SetPaneText(0, msg.c_str());
@@ -172,17 +148,15 @@ void CChildView::DeviceStatusChangedHandler(id3FingerCaptureStatus eStatus, int 
 {
     if (eStatus == id3DevicesDeviceCaptureStatus_DeviceReady)
     {
-        int currentDeviceId = 0;
-        id3FingerCaptureFingerScanner_GetDeviceId(m_hFingerCapture, &currentDeviceId);
+        int currentDeviceId = m_fingerCapture.deviceId();
         m_statusBar->SetPaneText(0, format("Start senser %d", currentDeviceId).c_str());
 
-        id3FingerCaptureFingerScanner_StartCapture(m_hFingerCapture, id3FingerCaptureFingerPositionFlags_RightIndexFinger);
+        m_fingerCapture.startCapture(id3FingerCaptureFingerPositionFlags_RightIndexFinger);
         Invalidate();
     }
     else if (eStatus == id3DevicesDeviceCaptureStatus_DeviceError)
     {
-        int currentDeviceId = 0;
-        id3FingerCaptureFingerScanner_GetDeviceId(m_hFingerCapture, &currentDeviceId);
+        int currentDeviceId = m_fingerCapture.deviceId();
         m_statusBar->SetPaneText(0, format("sensor %d error %d", currentDeviceId, errorCode).c_str());
     }
 }
@@ -191,12 +165,9 @@ void CChildView::ImagePreviewHandler()
 {
     if (m_lockCurrentPicture == 0)
     {
-        bool available = false;
-        int sdk_err = id3FingerCaptureFingerScanner_GetCurrentFrame(m_hFingerCapture, m_hCurrentPicture, &available);
-        if ((sdk_err == 0) && available)
+        if (m_fingerCapture.getCurrentFrame(m_currentPicture))
         {
-            int height = 0;
-            id3DevicesCaptureImage_GetHeight(m_hCurrentPicture, &height);
+            int height = m_currentPicture.height();
             if (height > 0)
             {
                 m_facialRect = CRect();
@@ -210,19 +181,17 @@ void CChildView::ImageCapturedHandler()
 {
     if (m_lockCurrentPicture == 0)
     {
-        ID3_FINGER_IMAGE hFingerImage{};
-        id3FingerImage_Initialize(&hFingerImage);
-        int sdk_err = id3FingerCaptureFingerScanner_GetCapturedImage(m_hFingerCapture, hFingerImage);
+        FingerImage fingerImage;
+        int sdk_err = m_fingerCapture.getCapturedImage(fingerImage);
         if (sdk_err == 0)
         {
-            int fingerCount = 0;
-            id3FingerImage_GetFingerCount(hFingerImage, &fingerCount);
+            int fingerCount = fingerImage.getFingerCount();
             m_statusBar->SetPaneText(0,format("Finger count = %d", fingerCount).c_str());
             if (fingerCount > 0)
             {
                 ID3_FINGER_TEMPLATE_RECORD hTemplateRecord{};
                 id3FingerTemplateRecord_Initialize(&hTemplateRecord);
-                sdk_err = id3FingerImage_GetTemplateRecord(hFingerImage, hTemplateRecord);
+                sdk_err = fingerImage.getTemplateRecord(hTemplateRecord);
                 check_sdkerr(sdk_err, "id3FingerImage_GetTemplateRecord");
 
                 int templateRecordCount = 0;
@@ -238,16 +207,11 @@ void CChildView::ImageCapturedHandler()
                     int quality{};
                     id3FingerTemplate_GetQuality(hFingerTemplateItem, &quality);
                     m_statusBar->SetPaneText(0, format("Finger count = %d, finger position = %s, quality = %d", fingerCount, id3Finger_GetFingerPositionString(ePosition), quality).c_str());
-
-
-
                     id3FingerTemplate_Dispose(&hFingerTemplateItem);
                 }
-
                 id3FingerTemplateRecord_Dispose(&hTemplateRecord);
             }
         }
-        id3FingerImage_Dispose(&hFingerImage);
     }
 }
 
@@ -256,7 +220,6 @@ void CChildView::Initialize(CStatusBar *statusBar)
     m_statusBar = statusBar;
 
     m_lockCurrentPicture++;
-    id3DevicesCaptureImage_Initialize(&m_hCurrentPicture);
 
     //char cw[256];
     //GetCurrentDirectory(256, cw);
@@ -271,7 +234,7 @@ void CChildView::Initialize(CStatusBar *statusBar)
     std::string models_dir = "../../models/";
 
     // Load license in devices sdk
-    int sdk_err = id3DevicesLicense_CheckLicense(license_path.c_str(), nullptr);
+    int sdk_err = DeviceManager::checkLicense(license_path.c_str());
     check_sdkerr(sdk_err, "id3DevicesLicense_CheckLicense");
 
     // Load license in finger sdk
@@ -288,7 +251,7 @@ void CChildView::Initialize(CStatusBar *statusBar)
     /**
      * Once the model is loaded, it is now possible to instantiate an ID3_FINGER_EXTRACTOR object.
      */
-    sdk_err = id3FingerExtractor_Initialize(&m_hExtractor);
+    sdk_err = m_extractor.initialize();
     check_sdkerr(sdk_err, "id3FingerExtractor_Initialize");
 
     /**
@@ -297,41 +260,44 @@ void CChildView::Initialize(CStatusBar *statusBar)
      * MINEX III submission
      * - ThreadCount: allocating more than 1 thread here can increase the speed of the process.
      */
-    sdk_err = id3FingerExtractor_SetMinutiaDetectorModel(m_hExtractor, id3FingerModel_FingerMinutiaDetector3B);
+    sdk_err = m_extractor.setMinutiaDetectorModel(id3FingerModel_FingerMinutiaDetector3B);
     check_sdkerr(sdk_err, "id3FingerExtractor_SetModel");
-    sdk_err = id3FingerExtractor_SetThreadCount(m_hExtractor, 4);
+    sdk_err = m_extractor.setThreadCount(4);
     check_sdkerr(sdk_err, "id3FingerExtractor_SetThreadCount");
 
     // Initialize device manager
-    sdk_err = id3DevicesDeviceManager_Initialize(false);
+    sdk_err = DeviceManager::initialize();
+    check_sdkerr(sdk_err, "id3DevicesDeviceManager_Initialize");
+
+    sdk_err = DeviceManager::configure(id3DevicesMessageLoopMode_ApplicationMessageLoop);
     check_sdkerr(sdk_err, "id3DevicesDeviceManager_Initialize");
 
     // Initialize finger scanner
-    sdk_err = id3FingerCaptureFingerScanner_Initialize(&m_hFingerCapture);
+    sdk_err = m_fingerCapture.initialize();
     check_sdkerr(sdk_err, "id3FingerCaptureFingerScanner_Initialize");
 
     // Setup finger scanner parameters
-    sdk_err = id3FingerCaptureFingerScanner_SetAutoCapture(m_hFingerCapture, true);
-    sdk_err = id3FingerCaptureFingerScanner_SetAutoProcess(m_hFingerCapture, true);
-    sdk_err = id3FingerCaptureFingerScanner_SetFingerExtractor(m_hFingerCapture, m_hExtractor);
+    sdk_err = m_fingerCapture.setAutoCapture(true);
+    sdk_err = m_fingerCapture.setAutoProcess(true);
+    sdk_err = m_fingerCapture.setFingerExtractor(m_extractor);
 
     // Setup device manager callback
-    sdk_err = id3DevicesDeviceManager_SetDeviceAddedCallback(CaptureManager_DeviceAddedHandler, this);
-    sdk_err = id3DevicesDeviceManager_SetDeviceRemovedCallback(CaptureManager_DeviceRemovedHandler, this);
+    sdk_err = DeviceManager::setDeviceAddedCallback(CaptureManager_DeviceAddedHandler, this);
+    sdk_err = DeviceManager::setDeviceRemovedCallback(CaptureManager_DeviceRemovedHandler, this);
 
     // Setup finger scanner callback
-    sdk_err = id3FingerCaptureFingerScanner_SetDeviceStatusChangedCallback(m_hFingerCapture, CaptureChannel_DeviceStatusChangedHandler, this);
-    sdk_err = id3FingerCaptureFingerScanner_SetImagePreviewCallback(m_hFingerCapture, CaptureChannel_ImagePreviewHandler, this);
-    sdk_err = id3FingerCaptureFingerScanner_SetImageCapturedCallback(m_hFingerCapture, CaptureChannel_ImageCapturedHandler, this);
+    sdk_err = m_fingerCapture.setDeviceStatusChangedCallback(CaptureChannel_DeviceStatusChangedHandler, this);
+    sdk_err = m_fingerCapture.setImagePreviewCallback(CaptureChannel_ImagePreviewHandler, this);
+    sdk_err = m_fingerCapture.setImageCapturedCallback(CaptureChannel_ImageCapturedHandler, this);
 
     // Load Futronic and Morpho Smart FingerScanner plugin
-    sdk_err = id3DevicesDeviceManager_LoadPlugin("id3DevicesFutronic", nullptr);
+    sdk_err = DeviceManager::loadPlugin("id3DevicesFutronic");
     check_sdkerr(sdk_err, "id3DevicesDeviceManager_LoadPlugin(id3DevicesFutronic)");
-    sdk_err = id3DevicesDeviceManager_LoadPlugin("id3DevicesMorphoSmart", nullptr);
+    sdk_err = DeviceManager::loadPlugin("id3DevicesMorphoSmart");
     check_sdkerr(sdk_err, "id3DevicesDeviceManager_LoadPlugin(id3DevicesMorphoSmart)");
 
     // Start device manager
-    sdk_err = id3DevicesDeviceManager_Start();
+    sdk_err = DeviceManager::start();
 
     m_statusBar->SetPaneText(0,"Initialization done. sensor plug & play process started.");
     m_lockCurrentPicture--;
@@ -339,25 +305,20 @@ void CChildView::Initialize(CStatusBar *statusBar)
 
 void CChildView::OnClose() {
     m_lockCurrentPicture++;
-    id3FingerCaptureFingerScanner_StopCapture(m_hFingerCapture);
+    m_fingerCapture.stopCapture();
     Sleep(100);
-    id3FingerCaptureFingerScanner_Dispose(&m_hFingerCapture);
-    id3DevicesDeviceManager_Stop();
-    id3DevicesCaptureImage_Dispose(&m_hCurrentPicture);
-    id3FingerCaptureFingerScanner_Dispose(&m_hFingerCapture);
-    id3FingerExtractor_Dispose(&m_hExtractor);
+    DeviceManager::stop();
     id3FingerLibrary_UnloadModel(id3FingerModel_FingerMinutiaDetector3B, id3FingerProcessingUnit_Cpu);
 }
 
 void CChildView::Dispose()
 {
-    id3DevicesDeviceManager_Dispose();
+    DeviceManager::dispose();
 }
 
 void CChildView::LoadImage(CString &sFilePath)
 {
-    bool captureStarted = false;
-    id3FingerCaptureFingerScanner_GetIsCapturing(m_hFingerCapture, &captureStarted);
+    bool captureStarted = m_fingerCapture.isCapturing();
     if (captureStarted == true)
     {
         MessageBoxA("Unable to load an image when a camera is in used", "LoadImage", MB_OK);
@@ -390,7 +351,7 @@ void CChildView::LoadImage(CString &sFilePath)
                 memcpy(&m_pixels[y * dst_stride], px_addr, s);
             }
             m_lockCurrentPicture++;
-            sdk_err = id3DevicesCaptureImage_Set(m_hCurrentPicture, w, h, id3DevicesPixelFormat_Bgr24Bits, m_pixels.data());
+            sdk_err = id3DevicesCaptureImage_Set(m_currentPicture, w, h, id3DevicesPixelFormat_Bgr24Bits, m_pixels.data());
 
             m_lockCurrentPicture--;
         }
@@ -438,20 +399,16 @@ void CChildView::OnPaint()
 
 	CPaintDC dc(this); // device background for painting
 
-    int height = 0;
-    id3DevicesCaptureImage_GetHeight(m_hCurrentPicture, &height);
+    int height = m_currentPicture.height();
     if (height > 0)
     {
-        int width = 0;
-        id3DevicesCaptureImage_GetWidth(m_hCurrentPicture, &width);
+        int width = m_currentPicture.width();
         if (m_image.IsNull())
         {
             m_image.Create(width, -height, 24); // -height because need top-down DIB 
         }
-        unsigned char *pixels_src{};
-        id3DevicesCaptureImage_GetPixels(m_hCurrentPicture, (void**)&pixels_src);
-        int stride_src = 0;
-        id3DevicesCaptureImage_GetStride(m_hCurrentPicture, &stride_src);
+        auto pixels_src = (unsigned char *)m_currentPicture.getPixels();
+        int stride_src = m_currentPicture.stride();
         int stride_dst = m_image.GetPitch();
         if (stride_dst == stride_src)
         {

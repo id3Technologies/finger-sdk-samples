@@ -1,9 +1,9 @@
 import os
 import id3finger
 
-print("------------------")
-print("id3 Finger Toolkit")
-print("------------------")
+print("--------------------------")
+print("id3 Finger Recognition CLI")
+print("--------------------------")
 
 # Before calling any function of the SDK you must first check a valid license file.
 # To get such a file please use the provided activation tool.
@@ -21,8 +21,6 @@ modelPath = "../models"
 # - a fingerprint aligner and encoder to extract proprietary template data for better accuracy (optional)
 print("Loading models... ")
 id3finger.FingerLibrary.load_model(modelPath, id3finger.FingerModel.FINGER_MINUTIA_DETECTOR_3B, id3finger.ProcessingUnit.CPU) # mandatory
-id3finger.FingerLibrary.load_model(modelPath, id3finger.FingerModel.FINGER_ALIGNER_1A, id3finger.ProcessingUnit.CPU) # optional if using proprietary data
-id3finger.FingerLibrary.load_model(modelPath, id3finger.FingerModel.FINGER_ENCODER_1A, id3finger.ProcessingUnit.CPU) # optional if using proprietary data
 print("Done.")
 
 # Load sample images from files.
@@ -49,8 +47,7 @@ image2.set_resolution(500)
 # SDK user guide for more details.
 print("Init finger extractor... ")
 fingerExtractor = id3finger.FingerExtractor(
-    finger_aligner_model = id3finger.FingerModel.FINGER_ALIGNER_1A, # activate alignment for finger encoding (optional)
-    finger_encoder_model = id3finger.FingerModel.FINGER_ENCODER_1A, # activate proprietary template encoding (optional)
+    minutia_detector_model = id3finger.FingerModel.FINGER_MINUTIA_DETECTOR_3B, # setting the model to use is mandatory
     thread_count = 4)
 print("Done.")
 
@@ -96,7 +93,5 @@ del image1
 del image2
 del fingerMatcher
 del fingerExtractor
-id3finger.FingerLibrary.unload_model(id3finger.FingerModel.FINGER_ALIGNER_1A, id3finger.ProcessingUnit.CPU)
-id3finger.FingerLibrary.unload_model(id3finger.FingerModel.FINGER_ENCODER_1A, id3finger.ProcessingUnit.CPU)
 id3finger.FingerLibrary.unload_model(id3finger.FingerModel.FINGER_MINUTIA_DETECTOR_3B, id3finger.ProcessingUnit.CPU)
 print("Sample terminated successfully.")

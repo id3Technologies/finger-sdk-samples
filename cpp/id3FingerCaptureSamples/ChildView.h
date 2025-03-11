@@ -5,7 +5,8 @@
 
 #pragma once
 #include <id3DevicesLib.h>
-#include <id3FingerCaptureLib.h>
+#include <id3Devices/helpers/id3DevicesCpp.h>
+#include "id3FingerCpp.h"
 #include <id3FingerLib.h>
 #include <string>
 #include <vector>
@@ -25,9 +26,9 @@ public:
 protected:
     CStatusBar *m_statusBar{};
     CImage m_image;
-    ID3_FINGER_CAPTURE_FINGER_SCANNER m_hFingerCapture{};
-    ID3_DEVICES_CAPTURE_IMAGE m_hCurrentPicture{};
-    ID3_FINGER_EXTRACTOR m_hExtractor{};
+    FingerScanner m_fingerCapture;
+    CapturedImage m_currentPicture{};
+    FingerExtractor m_extractor;
     std::vector<uint8_t> m_pixels;
     CRect m_facialRect{};
     volatile int m_lockCurrentPicture;

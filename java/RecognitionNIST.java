@@ -3,34 +3,40 @@ import eu.id3.finger.*;
 public class RecognitionNIST {
 
     /*
-     * This samples will show how to retrieve fingerprint images from ANSI/NIST-ITL 1-2011 transactions and 
+     * This samples will show how to retrieve fingerprint images from ANSI/NIST-ITL
+     * 1-2011 transactions and
      * compare them.
      * 
-     * It is recommended to first have a look at the RecognitionCLI sample which deals with simple images before 
+     * It is recommended to first have a look at the RecognitionNIST sample which
+     * deals with simple images before
      * getting into this sample
      */
-    
+
     public static void main(String[] args) {
         System.out.println("----------------------------------");
         System.out.println("id3.Finger.Samples.RecognitionNIST");
         System.out.println("----------------------------------");
 
         /*
-         * Before calling any function of the SDK you must first check a valid license file.
+         * Before calling any function of the SDK you must first check a valid license
+         * file.
          * To get such a file please use the provided activation tool.
          * It is also possible to use the FingerLicense.Activation(...) APIs
          */
         FingerLicense.checkLicense("../id3Finger.lic");
 
         /*
-         * The Finger SDK heavily relies on deep learning technics and hence requires trained models to run.
+         * The Finger SDK heavily relies on deep learning technics and hence requires
+         * trained models to run.
          * Fill in the correct path to the downloaded models.
          */
         String modelPath = "../models";
 
         /*
-         * Once a model is loaded in the desired processing unit (CPU or GPU) several instances of the associated processor can be created.
-         * For instance in this sample, we will only load a minutia detector to extract iso minutiae data
+         * Once a model is loaded in the desired processing unit (CPU or GPU) several
+         * instances of the associated processor can be created.
+         * For instance in this sample, we will only load a minutia detector to extract
+         * iso minutiae data
          */
         System.out.println("Loading models... ");
         FingerLibrary.loadModel(modelPath, FingerModel.FINGER_MINUTIA_DETECTOR_3B, ProcessingUnit.CPU);
@@ -47,19 +53,27 @@ public class RecognitionNIST {
 
         /*
          * Load fingerprint image from ANSI/NIST-ITL transactions
-         * - The SDK can handle ANSI/NIST-ITL 1-2011 Update 2015 transactions both in traditional and xml encoded formats
-         * - The SDK will return a FingerImageList containing all found images in records types 04 or 14. 
-         * - When available the finger position and the finger resolution will be retrieved
+         * - The SDK can handle ANSI/NIST-ITL 1-2011 Update 2015 transactions both in
+         * traditional and xml encoded formats
+         * - The SDK will return a FingerImageList containing all found images in
+         * records types 04 or 14.
+         * - When available the finger position and the finger resolution will be
+         * retrieved
          * 
-         * Transactions used in this sample are examples from https://www.nist.gov/itl/iad/image-group/ansinist-itl-standard-references
+         * Transactions used in this sample are examples from
+         * https://www.nist.gov/itl/iad/image-group/ansinist-itl-standard-references
          */
         System.out.println("Loading images from ANSI/NIST-ITL transactions... ");
         // Load from traditional encoded transation with type 04 records
-        FingerImageRecord imageList1 = FingerImageRecord.fromFile(FingerImageRecordFormat.AN2K_2011_TRANSACTION_TRADITIONAL_ENCODING,"../data/an2k-type-04-tpcard.an2");
-        System.out.println("Found " + imageList1.getCount() + " fingerprint images in the an2k-type-04-tpcard.an2 transaction");
+        FingerImageRecord imageList1 = FingerImageRecord.fromFile(
+                FingerImageRecordFormat.AN2K_2011_TRANSACTION_TRADITIONAL_ENCODING, "../data/an2k-type-04-tpcard.an2");
+        System.out.println(
+                "Found " + imageList1.getCount() + " fingerprint images in the an2k-type-04-tpcard.an2 transaction");
         // Load from xml encoded transation with type 14 records
-        FingerImageRecord imageList2 = FingerImageRecord.fromFile(FingerImageRecordFormat.AN2K_2011_TRANSACTION_TRADITIONAL_ENCODING,"../data/an2k-type-14-tpcard.an2");
-        System.out.println("Found " + imageList2.getCount() + " fingerprint images in the an2k-type-14-tpcard.an2 transaction");
+        FingerImageRecord imageList2 = FingerImageRecord.fromFile(
+                FingerImageRecordFormat.AN2K_2011_TRANSACTION_TRADITIONAL_ENCODING, "../data/an2k-type-14-tpcard.an2");
+        System.out.println(
+                "Found " + imageList2.getCount() + " fingerprint images in the an2k-type-14-tpcard.an2 transaction");
         System.out.println("Done.\n");
 
         /*
@@ -71,27 +85,29 @@ public class RecognitionNIST {
          * Perform matches between the two records.
          * Several scenarii can be used, here we will:
          * - only compare fingerprint with the same positions
-         * - skip the two or four finger slaps (which need to be processed using the FingerDetector module to separate individual fingers)
+         * - skip the two or four finger slaps (which need to be processed using the
+         * FingerDetector module to separate individual fingers)
          */
-        for(int i = 0 ; i < imageList1.getCount() ; i++) {
+        for (int i = 0; i < imageList1.getCount(); i++) {
             FingerImage image1 = imageList1.get(i);
             FingerPosition position1 = image1.getPosition();
-            if(position1.getValue() == FingerPosition.UNKNOWN.getValue() 
-                || position1.getValue() > FingerPosition.PLAIN_LEFT_THUMB.getValue() ) {
-                    // if the position is not in [1-12] is either unknown or a slap so we skip it (for this sample scenario)
-                    image1.close();
-                    continue;
-                }
+            if (position1.getValue() == FingerPosition.UNKNOWN.getValue()
+                    || position1.getValue() > FingerPosition.PLAIN_LEFT_THUMB.getValue()) {
+                // if the position is not in [1-12] is either unknown or a slap so we skip it
+                // (for this sample scenario)
+                image1.close();
+                continue;
+            }
             FingerTemplate template1 = fingerExtractor.createTemplate(image1);
-            for(int j = 0 ; j < imageList2.getCount() ; j++) {
+            for (int j = 0; j < imageList2.getCount(); j++) {
                 FingerImage image2 = imageList2.get(j);
                 FingerPosition position2 = image2.getPosition();
-                if(position1 == position2) {
+                if (position1 == position2) {
                     FingerTemplate template2 = fingerExtractor.createTemplate(image2);
                     int score = fingerMatcher.compareTemplates(template1, template2);
                     if (score > FingerMatcherThreshold.FMR10000.getValue()) {
                         System.out.println("Match position " + position1.name() + ": " + score);
-                    } else{
+                    } else {
                         System.out.println("No Match position " + position1.name() + ": " + score);
                     }
                     template2.close();
@@ -101,7 +117,7 @@ public class RecognitionNIST {
             template1.close();
             image1.close();
         }
-        
+
         /*
          * Closing all SDK ressources
          */

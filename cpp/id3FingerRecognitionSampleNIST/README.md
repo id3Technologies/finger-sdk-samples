@@ -2,7 +2,7 @@
 
 This CMake project provides the following C/C++ samples:
 
-* **id3FingerRecognitionSampleCLI**
+* **id3FingerRecognitionSampleNIST**
 
 ## Build requirements
 
@@ -38,9 +38,9 @@ std::string models_dir = "../../../sdk/models/";
 
 ## Linux build steps
 
-### id3FingerRecognitionSampleCLI
+### id3FingerRecognitionSampleNIST
 
-To build and run **id3FingerRecognitionSampleCLI**, use the following command lines:
+To build and run **id3FingerRecognitionSampleNIST**, use the following command lines:
 
 ```bash
 mkdir build
@@ -48,14 +48,14 @@ cd build
 cmake -DLINUX_BUILD=ON ..
 make
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:../../../../bin/linux/x64
-./id3FingerRecognitionSampleCLI
+./id3FingerRecognitionSampleNIST
 ```
 
 ## Windows build steps
 
-### id3FingerRecognitionSampleCLI
+### id3FingerRecognitionSampleNIST
 
-To build and run **id3FingerRecognitionSampleCLI**, use the following command lines:
+To build and run **id3FingerRecognitionSampleNIST**, use the following command lines:
 
 ```bat
 mkdir build
@@ -63,5 +63,5 @@ cd build
 cmake -G "Visual Studio 15 2017 Win64" -DWINDOWS_BUILD=ON ..
 cmake --build .
 cd Debug
-.\id3FingerRecognitionSampleCLI.exe
+.\id3FingerRecognitionSampleNIST.exe
 ```
