@@ -19,8 +19,8 @@ This strategy is employed to ensure version consistency among the various suppor
 
 For this release of the samples the version numbers are :
 
-* Samples version: **4.1.0.0**
-* Required id3 Finger SDK version: **4.1.0**
+* Samples version: **4.5.0.0**
+* Required id3 Finger SDK version: **4.5.0**
 
 ## Getting started
 

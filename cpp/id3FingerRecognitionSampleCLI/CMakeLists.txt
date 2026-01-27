@@ -1,6 +1,9 @@
-cmake_minimum_required(VERSION 2.8.12)
+cmake_minimum_required(VERSION 3.30)
 
 project(id3FingerSdkCppSamples)
+
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 macro(postBuildCopyDirectory target dst_dir)
     set(dirs_list ${ARGN})

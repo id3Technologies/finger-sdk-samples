@@ -129,7 +129,7 @@ void id3CaptureSamplesApp::OnAppAbout()
 // gestionnaires de messages de id3CaptureSamplesApp
 void id3CaptureSamplesApp::OnFileOpen()
 {
-    const TCHAR szFilter[] = _T("Image Files (*.jpg;*.bmp;*.png)|*.jpg;*.bmp;*.png|All Files (*.*)|*.*||");
+    const TCHAR szFilter[] = _T("Finger Image Files (*.jpg;*.bmp;*.png;*.wsq)|*.jpg;*.bmp;*.png;*.wsq|All Files (*.*)|*.*||");
     CFileDialog dlg(FALSE, _T("csv"), NULL, OFN_HIDEREADONLY | OFN_READONLY, szFilter, NULL);
     if(dlg.DoModal() == IDOK)
     {

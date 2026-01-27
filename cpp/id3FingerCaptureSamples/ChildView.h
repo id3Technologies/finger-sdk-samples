@@ -1,19 +1,16 @@
-
 // ChildView.h : interface de la classe CChildView
 //
-
-
 #pragma once
 #include <id3DevicesLib.h>
-#include <id3Devices/helpers/id3DevicesCpp.h>
-#include "id3FingerCpp.h"
 #include <id3FingerLib.h>
+#include <id3FingerCaptureLib.h>
 #include <string>
 #include <vector>
 
-
 // fenêtre de CChildView
-
+using namespace id3DevicesCppWrapper;
+using namespace id3FingerCppWrapper;
+using namespace id3FingerCaptureCppWrapper;
 class CChildView : public CWnd
 {
 // Construction
@@ -27,10 +24,8 @@ protected:
     CStatusBar *m_statusBar{};
     CImage m_image;
     FingerScanner m_fingerCapture;
-    CapturedImage m_currentPicture{};
+    CaptureImage m_currentPicture;
     FingerExtractor m_extractor;
-    std::vector<uint8_t> m_pixels;
-    CRect m_facialRect{};
     volatile int m_lockCurrentPicture;
 
 // Opérations
